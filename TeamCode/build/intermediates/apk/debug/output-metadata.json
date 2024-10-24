@@ -16,5 +16,6 @@
       "outputFile": "TeamCode-debug.apk"
     }
   ],
-  "elementType": "File"
+  "elementType": "File",
+  "minSdkVersionForDexing": 24
 }

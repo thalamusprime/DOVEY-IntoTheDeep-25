@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.ftc6205.telemetry;
 
+import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -8,7 +10,7 @@ import java.util.ArrayList;
 
 public class DoveyTelemetry {
 
-    public void sendTelemetry(Telemetry telemetry, AprilTagProcessor tagProcessor) throws InterruptedException {
+    public void sendTelemetry(Telemetry telemetry, AprilTagProcessor tagProcessor, SparkFunOTOS otos) throws InterruptedException {
         String tag11_x = "";
         String tag11_y = "";
         String tag11_z = "";
@@ -28,6 +30,11 @@ public class DoveyTelemetry {
         String tag16_y = "";
         String tag16_z = "";
 
+        // Log the position to the telemetry
+        SparkFunOTOS.Pose2D pos = otos.getPosition();
+        telemetry.addData("X coordinate", pos.x);
+        telemetry.addData("Y coordinate", pos.y);
+        telemetry.addData("Heading angle", pos.h);
 //        telemetry.addLine(String.format(
 //                "Throttle y:x:rz | %5.2f : %5.2f : %5.2f",
 //                y,

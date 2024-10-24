@@ -2,8 +2,10 @@ package org.firstinspires.ftc.teamcode.ftc6205.teleop;
 
 //import com.acmerobotics.dashboard.FtcDashboard;
 //import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -15,19 +17,27 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 //import org.firstinspires.ftc.teamcode.ftc6205.pidcontrol.TrueNorth;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.ftc6205.motors.Drivetrain;
 import org.firstinspires.ftc.teamcode.ftc6205.telemetry.DoveyTelemetry;
-import org.firstinspires.ftc.teamcode.ftc6205.vision.DoveyVision;
+import org.firstinspires.ftc.teamcode.ftc6205.sensors.Camera;
+import org.firstinspires.ftc.teamcode.test.SensorSparkFunOTOS;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 @TeleOp(name = "*:DOVEY", group = "*")
 public class DOVEY_OPS extends LinearOpMode {
+    //Drivetrain drivetrain;
+
+    ////////////////////////////////////////////////////
     // Telemetry
     DoveyTelemetry doveyTelemetry;
-    DoveyVision doveyVision;
-    // AprilTag, VisionPortal
+    Camera doveyVision;
     AprilTagProcessor tagProcessor;
     VisionPortal visionPortal;
+    // OpticalTracking
+    SparkFunOTOS otos;
+
 
     // DRIVETRAIN
     DcMotor frontLeftMotor, backLeftMotor, frontRightMotor, backRightMotor;
@@ -47,14 +57,21 @@ public class DOVEY_OPS extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        //drivetrain = new Drivetrain();
+        //todo: move initialization to drivetrain object
+        //drivetrain.initMotors(hardwareMap);
+        //drivetrain.init(hardwareMap);
+        this.initMotors();
+
+        ////////////////////////////////////
         // Initialize Telemetry
         doveyTelemetry  = new DoveyTelemetry();
-        doveyVision  = new DoveyVision();
+        doveyVision  = new Camera();
         // Initialize Servos, Encoders, Motors
         initDistSensors();
         initEncoders();
-        initMotors();
         //initServos();
+        initOTOS();
         initIMU();
         initVision();
 
@@ -83,6 +100,9 @@ public class DOVEY_OPS extends LinearOpMode {
             encLeftValue = -encoderLeft.getCurrentPosition();
             encRightValue = -encoderRight.getCurrentPosition();
 
+            // Get OTOS position
+            //SparkFunOTOS.Pose2D pos = otos.getPosition();
+
             // DRIVETRAIN
             // Get yaw, reset in match optional
             if (gamepad1.start) {
@@ -91,10 +111,10 @@ public class DOVEY_OPS extends LinearOpMode {
                 imu.resetYaw();
             }
             if (gamepad1.back) {
-                encoderLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                encoderRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                encoderLeft.setDirection(DcMotorSimple.Direction.FORWARD);
-                encoderRight.setDirection(DcMotorSimple.Direction.REVERSE);
+//                encoderLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//                encoderRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//                encoderLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+//                encoderRight.setDirection(DcMotorSimple.Direction.REVERSE);
             }
 
             // Get XY: gamepad1
@@ -117,6 +137,7 @@ public class DOVEY_OPS extends LinearOpMode {
 
             // Get heading
             botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS); // bot
+
 
             // Robot-centric, Field-centric
             if (gamepad1.left_bumper) {
@@ -141,14 +162,16 @@ public class DOVEY_OPS extends LinearOpMode {
             frontRightPower = frontRightPower * (0.3 + 0.7 * gamepad1.right_trigger);
             backRightPower = backRightPower * (0.3 + 0.7 * gamepad1.right_trigger);
 
-            // Set motor power
+            //todo
+            // Set motor power in drivetrain object
+            //drivetrain.setPower(frontLeftPower, backLeftPower, frontRightPower, backRightPower);
             frontLeftMotor.setPower(frontLeftPower);
             backLeftMotor.setPower(backLeftPower);
             frontRightMotor.setPower(frontRightPower);
             backRightMotor.setPower(backRightPower);
 
             // Send Telemetry
-            doveyTelemetry.sendTelemetry(telemetry, tagProcessor);
+            doveyTelemetry.sendTelemetry(telemetry, tagProcessor, otos);
         }
     }
 
@@ -156,7 +179,7 @@ public class DOVEY_OPS extends LinearOpMode {
 
     private void initDistSensors() throws InterruptedException {
         distFront = hardwareMap.get(DistanceSensor.class, "distFront");
-        distBack = hardwareMap.get(DistanceSensor.class, "distBack");
+        //distBack = hardwareMap.get(DistanceSensor.class, "distBack");
     }
 
     private void initIMU() throws InterruptedException {
@@ -184,6 +207,21 @@ public class DOVEY_OPS extends LinearOpMode {
                 //.setCameraResolution( new Size(1920,1080) )
                 .build();
     }
+    //todo
+    private void initOTOS() throws InterruptedException {
+        otos = hardwareMap.get(SparkFunOTOS.class,"sensor_otos");
+        otos.setLinearUnit(DistanceUnit.INCH);
+        otos.setAngularUnit(AngleUnit.DEGREES);
+        SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(0, 0, 0);
+        otos.setOffset(offset);
+        otos.setLinearScalar(1.0);
+        otos.setAngularScalar(1.0);
+        otos.calibrateImu();
+        otos.resetTracking();
+        SparkFunOTOS.Pose2D currentPosition = new SparkFunOTOS.Pose2D(0, 0, 0);
+        otos.setPosition(currentPosition);
+    }
+
     //todo
     private void initEncoders() throws InterruptedException {
         encoderLeft = hardwareMap.dcMotor.get("frontleft");
