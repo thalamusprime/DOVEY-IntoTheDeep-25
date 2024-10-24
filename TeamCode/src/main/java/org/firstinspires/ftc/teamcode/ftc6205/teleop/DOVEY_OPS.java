@@ -57,12 +57,8 @@ public class DOVEY_OPS extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        //drivetrain = new Drivetrain();
-        //todo: move initialization to drivetrain object
-        //drivetrain.initMotors(hardwareMap);
-        //drivetrain.init(hardwareMap);
-        this.initMotors();
 
+        //drivetrain.init(new HardwareMap());
         ////////////////////////////////////
         // Initialize Telemetry
         doveyTelemetry  = new DoveyTelemetry();
@@ -70,6 +66,7 @@ public class DOVEY_OPS extends LinearOpMode {
         // Initialize Servos, Encoders, Motors
         initDistSensors();
         initEncoders();
+        initMotors();
         //initServos();
         initOTOS();
         initIMU();
@@ -136,7 +133,7 @@ public class DOVEY_OPS extends LinearOpMode {
             }
 
             // Get heading
-            botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS); // bot
+            //botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS); // bot
 
 
             // Robot-centric, Field-centric
@@ -162,9 +159,7 @@ public class DOVEY_OPS extends LinearOpMode {
             frontRightPower = frontRightPower * (0.3 + 0.7 * gamepad1.right_trigger);
             backRightPower = backRightPower * (0.3 + 0.7 * gamepad1.right_trigger);
 
-            //todo
-            // Set motor power in drivetrain object
-            //drivetrain.setPower(frontLeftPower, backLeftPower, frontRightPower, backRightPower);
+            // Set motor power
             frontLeftMotor.setPower(frontLeftPower);
             backLeftMotor.setPower(backLeftPower);
             frontRightMotor.setPower(frontRightPower);
