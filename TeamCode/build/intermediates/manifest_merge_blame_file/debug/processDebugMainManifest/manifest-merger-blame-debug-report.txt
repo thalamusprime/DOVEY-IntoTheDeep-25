@@ -176,7 +176,7 @@
 103        android:allowBackup="true"
 103-->[:FtcRobotController] C:\Users\rhill\FIRST\ftc\DOVEY-IntoTheDeep-25\FtcRobotController\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:13:9-35
 104        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-104-->[androidx.core:core:1.3.0] C:\Users\rhill\.gradle\caches\transforms-3\31ef1aec68df341dcaa50a764abd6e73\transformed\core-1.3.0\AndroidManifest.xml:24:18-86
+104-->[androidx.core:core:1.6.0] C:\Users\rhill\.gradle\caches\transforms-3\0a11f8249214c2b9474c000e14f69195\transformed\core-1.6.0\AndroidManifest.xml:24:18-86
 105        android:debuggable="true"
 106        android:extractNativeLibs="true"
 107        android:icon="@drawable/ic_launcher"
