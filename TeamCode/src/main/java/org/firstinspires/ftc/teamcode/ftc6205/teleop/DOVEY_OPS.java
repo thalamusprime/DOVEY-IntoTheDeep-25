@@ -111,10 +111,10 @@ public class DOVEY_OPS extends LinearOpMode {
                 imu.resetYaw();
             }
             if (gamepad1.back) {
-//                encoderLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//                encoderRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//                encoderLeft.setDirection(DcMotorSimple.Direction.FORWARD);
-//                encoderRight.setDirection(DcMotorSimple.Direction.REVERSE);
+                encoderLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                encoderRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                encoderLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+                encoderRight.setDirection(DcMotorSimple.Direction.REVERSE);
             }
 
             // Get XY: gamepad1
