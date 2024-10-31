@@ -102,12 +102,13 @@ public class DOVEY_OPS extends LinearOpMode {
 
             // DRIVETRAIN
             // Get yaw, reset in match optional
-            if (gamepad1.start) {
+            if (gamepad1.options) {
+                initOTOS();
                 refHeading = 0;
                 botHeading = 0;
                 imu.resetYaw();
             }
-            if (gamepad1.back) {
+            if (gamepad1.share) {
                 encoderLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 encoderRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 encoderLeft.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -133,7 +134,7 @@ public class DOVEY_OPS extends LinearOpMode {
             }
 
             // Get heading
-            //botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS); // bot
+            botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS); // bot
 
 
             // Robot-centric, Field-centric
