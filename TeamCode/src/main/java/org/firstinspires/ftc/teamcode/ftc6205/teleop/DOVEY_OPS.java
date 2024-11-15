@@ -38,7 +38,6 @@ public class DOVEY_OPS extends LinearOpMode {
     // OpticalTracking
     SparkFunOTOS otos;
 
-
     // DRIVETRAIN
     DcMotor frontLeftMotor, backLeftMotor, frontRightMotor, backRightMotor;
 
