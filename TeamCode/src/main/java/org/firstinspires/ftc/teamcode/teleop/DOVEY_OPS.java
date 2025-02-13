@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.ftc6205.teleop;
+package org.firstinspires.ftc.teamcode.teleop;
 
 //import com.acmerobotics.dashboard.FtcDashboard;
 //import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
@@ -63,11 +63,11 @@ public class DOVEY_OPS extends LinearOpMode {
         doveyTelemetry  = new DoveyTelemetry();
         doveyVision  = new Camera();
         // Initialize Servos, Encoders, Motors
-        initDistSensors();
+        //initDistSensors();
         initEncoders();
         initMotors();
         //initServos();
-        initOTOS();
+        //initOTOS();
         initIMU();
         initVision();
 
@@ -101,19 +101,19 @@ public class DOVEY_OPS extends LinearOpMode {
 
             // DRIVETRAIN
             // Get yaw, reset in match optional
-            if (gamepad1.options) {
-                initOTOS();
-                refHeading = 0;
-                botHeading = 0;
-                imu.resetYaw();
-            }
+
             if (gamepad1.share) {
                 encoderLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 encoderRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 encoderLeft.setDirection(DcMotorSimple.Direction.FORWARD);
                 encoderRight.setDirection(DcMotorSimple.Direction.REVERSE);
             }
-
+            if (gamepad1.options) {
+                //initOTOS();
+                refHeading = 0;
+                botHeading = 0;
+                imu.resetYaw();
+            }
             // Get XY: gamepad1
             y = gamepad1.left_stick_y; // Remember, Y stick value is reversed
             x = -gamepad1.left_stick_x; //-
@@ -173,7 +173,7 @@ public class DOVEY_OPS extends LinearOpMode {
     //////////////////////////////////////////////////////////// CUSTOM PRIVATE FUNCTIONS
 
     private void initDistSensors() throws InterruptedException {
-        distFront = hardwareMap.get(DistanceSensor.class, "distFront");
+        //distFront = hardwareMap.get(DistanceSensor.class, "distFront");
         //distBack = hardwareMap.get(DistanceSensor.class, "distBack");
     }
 
