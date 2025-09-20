@@ -13,6 +13,10 @@
 *.class
 *.hprof
 
+# Gradle files
+.gradle/
+build/
+
 # Generated files
 bin/
 gen/
